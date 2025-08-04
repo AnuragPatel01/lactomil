@@ -2,15 +2,20 @@ import { useEffect, useState } from "react";
 import "./index.css";
 
 const formatToINR = (value, round = true) => {
-  if (value >= 1e7) return (round ? (value / 1e7).toFixed(2) : value / 1e7) + " Cr";
-  if (value >= 1e5) return (round ? (value / 1e5).toFixed(2) : value / 1e5) + " L";
+  if (value >= 1e7)
+    return (round ? (value / 1e7).toFixed(2) : value / 1e7) + " Cr";
+  if (value >= 1e5)
+    return (round ? (value / 1e5).toFixed(2) : value / 1e5) + " L";
   return round ? value.toFixed(2) : value;
 };
 
 const formatToUSD = (value, round = true) => {
-  if (value >= 1e9) return (round ? (value / 1e9).toFixed(2) : value / 1e9) + "B";
-  if (value >= 1e6) return (round ? (value / 1e6).toFixed(2) : value / 1e6) + "M";
-  if (value >= 1e3) return (round ? (value / 1e3).toFixed(2) : value / 1e3) + "K";
+  if (value >= 1e9)
+    return (round ? (value / 1e9).toFixed(2) : value / 1e9) + "B";
+  if (value >= 1e6)
+    return (round ? (value / 1e6).toFixed(2) : value / 1e6) + "M";
+  if (value >= 1e3)
+    return (round ? (value / 1e3).toFixed(2) : value / 1e3) + "K";
   return round ? value.toFixed(2) : value;
 };
 
@@ -24,10 +29,18 @@ const parseFlexibleInput = (input) => {
   } else if (input.endsWith("L") || input.endsWith("LAKH")) {
     multiplier = 1e5;
     input = input.replace("L", "").replace("LAKH", "");
-  } else if (input.endsWith("B") || input.endsWith("BIL") || input.endsWith("BILLION")) {
+  } else if (
+    input.endsWith("B") ||
+    input.endsWith("BIL") ||
+    input.endsWith("BILLION")
+  ) {
     multiplier = 1e9;
     input = input.replace(/B(IL(LION)?)?/, "");
-  } else if (input.endsWith("M") || input.endsWith("MIL") || input.endsWith("MILLION")) {
+  } else if (
+    input.endsWith("M") ||
+    input.endsWith("MIL") ||
+    input.endsWith("MILLION")
+  ) {
     multiplier = 1e6;
     input = input.replace(/M(IL(LION)?)?/, "");
   } else if (input.endsWith("K") || input.endsWith("THOUSAND")) {
@@ -109,15 +122,12 @@ export default function App() {
         ₹lac → $mil
       </h1>
 
-      <div className="w-full max-w-sm sm:max-w-md bg-white/30 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-lg space-y-4 transition-all ease-in-out scale-110">
+      <div className="w-full max-w-sm sm:max-w-md bg-white/30 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-lg space-y-4 transition-all ease-in-out scale-105">
         <div className="flex justify-between items-center text-m">
           <span className="font-semibold text-black">
             {isInrToUsd ? "INR → USD" : "USD → INR"}
           </span>
-          <button
-            onClick={swap}
-            className="px-3 py-1"
-          >
+          <button onClick={swap} className="px-3 py-1">
             Swap
           </button>
         </div>
@@ -126,10 +136,7 @@ export default function App() {
           <label className="font-bold text-black ">
             Rounding: {rounding ? "On" : "Off"}
           </label>
-          <button
-            onClick={() => setRounding(!rounding)}
-            className="px-3 py-1"
-          >
+          <button onClick={() => setRounding(!rounding)} className="px-3 py-1">
             Toggle
           </button>
         </div>
@@ -146,10 +153,7 @@ export default function App() {
           className="w-full p-3 text-sm sm:text-base rounded-lg border bg-white/50 backdrop-blur-sm text-gray-800 font-semibold focus:outline-none"
         />
 
-        <button
-          onClick={convert}
-          className="w-full  py-2 "
-        >
+        <button onClick={convert} className="w-full  py-2 ">
           Convert
         </button>
 
