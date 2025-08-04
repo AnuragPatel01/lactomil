@@ -104,31 +104,31 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen  p-4">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-white text-center">
         ₹lac → $mil
       </h1>
 
-      <div className="w-full max-w-sm sm:max-w-md bg-white/30 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-lg space-y-4 transition-all ease-in-out">
+      <div className="w-full max-w-sm sm:max-w-md bg-white/30 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-lg space-y-4 transition-all ease-in-out scale-110">
         <div className="flex justify-between items-center text-m">
-          <span className="font-semibold text-gray-700">
+          <span className="font-semibold text-black">
             {isInrToUsd ? "INR → USD" : "USD → INR"}
           </span>
           <button
             onClick={swap}
-            className="px-3 py-1 bg-black text-white rounded-full hover:bg-gray-800 transition"
+            className="px-3 py-1"
           >
             Swap
           </button>
         </div>
 
         <div className="flex justify-between items-center text-sm">
-          <label className="font-bold text-gray-700 ">
+          <label className="font-bold text-black ">
             Rounding: {rounding ? "On" : "Off"}
           </label>
           <button
             onClick={() => setRounding(!rounding)}
-            className="px-3 py-1 bg-black text-white rounded-full hover:bg-gray-800 transition"
+            className="px-3 py-1"
           >
             Toggle
           </button>
@@ -148,13 +148,13 @@ export default function App() {
 
         <button
           onClick={convert}
-          className="w-full font-bold bg-black hover:bg-gray-800 text-white py-2 rounded-lg shadow text-sm sm:text-base"
+          className="w-full  py-2 "
         >
           Convert
         </button>
 
         {result && (
-          <div className="text-lg sm:text-xl text-center text-green-700 font-bold">
+          <div className="text-lg sm:text-xl text-center text-yellow-400 font-bold">
             {result}
           </div>
         )}
