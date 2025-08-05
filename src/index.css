@@ -33,7 +33,27 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed; /* Optional: makes it feel anchored */
 }
+
+/* Optional: dark overlay to improve readability */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: -1;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 640px) {
+  body {
+    background-position: top;
+    background-size: auto 100%; /* Full height, auto width */
+    background-attachment: scroll; /* Better for performance */
+  }
+}
+
 
 /* For WebKit browsers (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
