@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* @import 'react-datepicker/dist/react-datepicker.css'; */
+
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -33,6 +35,39 @@ body {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+/* For WebKit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); /* Light transparent track */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4); /* Dark thumb */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Optional: Style scrollbars inside a specific container */
+.history-scroll::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.4) rgba(255,255,255,0.1);
+}
+
 
 h1 {
   font-size: 3.2em;

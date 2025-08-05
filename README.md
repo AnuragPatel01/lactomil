@@ -1,18 +1,30 @@
-# 💱 LACTOMIL
+# 💱 Currency Converter — ₹Lakh ↔ $Million
 
-A responsive, smart currency converter built with **React** and **Tailwind CSS**.  
-It supports both **Indian** (e.g., `1Cr`, `5L`) and **Western** (e.g., `10K`, `2.5M`) currency notations and fetches **real-time exchange rates** from [Fawaz Currency API](https://github.com/fawazahmed0/currency-api).
+A sleek and responsive currency converter built with **React** and **Tailwind CSS**. Instantly convert between INR and USD using Indian (Lakh/Cr) and American (K/M/B) number systems. Smart input parsing, real-time exchange rates, and useful tools like history, rounding, copy, and share support.
 
 ---
 
-## 🚀 Features
+## 🔥 Features
 
-- 🔁 **Swap INR ↔ USD** in one click
-- 🔍 **Smart input**: `1Cr`, `50L`, `2.3M`, `10K`, etc.
-- 💰 **Accurate rates** (INR → USD or USD → INR depending on direction)
-- 🎯 **Rounding toggle** to show precise or simplified results
-- 📱 **Fully responsive UI**
-- 🌫️ **Glassmorphism-style card with Tailwind CSS**
+- 🇮🇳➡️🇺🇸 **Indian ↔ American Number System**
+  - Supports values like `1Cr`, `50L`, `$2.3M`, `5K`, etc.
+- 🔁 **Swap** conversion direction without clearing your input
+- 🎯 **Smart Input Parsing**
+  - Detects whether input is INR or USD and auto-configures direction
+- 🧠 **Flexible Notations**
+  - Interprets `L`, `Cr`, `K`, `M`, `B`, `Million`, `Billion`, `Lakh`, etc.
+- 🔘 **Rounding Toggle**
+  - Choose to display precise or rounded values
+- 📈 **Real-Time Exchange Rate**
+  - Fetched from [Fawaz Ahmed’s Currency API](https://github.com/fawazahmed0/currency-api)
+- 📋 **Copy to Clipboard**
+- 📤 **Share Result (Web Share API)**
+- 🕓 **Recent History**
+  - Stores the **last 15 conversions** with date and direction
+- 💻 **Responsive Design**
+  - Optimized for desktop and mobile
+- 🌐 **Offline-safe UI**
+  - Clean fallback if exchange rate fetch fails
 
 ---
 

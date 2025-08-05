@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./index.css";
 
+// Formatter for INR
 const formatToINR = (value, round = true) => {
   if (value >= 1e7)
     return (round ? (value / 1e7).toFixed(2) : value / 1e7) + " Cr";
@@ -9,6 +10,7 @@ const formatToINR = (value, round = true) => {
   return round ? value.toFixed(2) : value;
 };
 
+// Formatter for USD
 const formatToUSD = (value, round = true) => {
   if (value >= 1e9)
     return (round ? (value / 1e9).toFixed(2) : value / 1e9) + "B";
@@ -19,6 +21,7 @@ const formatToUSD = (value, round = true) => {
   return round ? value.toFixed(2) : value;
 };
 
+// Flexible parser (e.g. 50L, 1.2Cr, 2M, 3.5B, 5K)
 const parseFlexibleInput = (input) => {
   input = input.trim().toUpperCase().replace(/\s/g, "");
   let multiplier = 1;
@@ -60,6 +63,12 @@ export default function App() {
   const [rate, setRate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("conversion_history");
+    if (stored) setHistory(JSON.parse(stored));
+  }, []);
 
   useEffect(() => {
     const fetchRate = async () => {
@@ -85,19 +94,52 @@ export default function App() {
       return;
     }
 
+    let converted, formatted;
     if (isInrToUsd) {
-      const converted = amount * rate;
-      setResult(formatToUSD(converted, rounding));
+      converted = amount * rate;
+      formatted = formatToUSD(converted, rounding);
     } else {
-      const converted = amount / rate;
-      setResult(formatToINR(converted, rounding));
+      converted = amount / rate;
+      formatted = formatToINR(converted, rounding);
     }
+
+    setResult(formatted);
+
+    const newEntry = {
+      id: Date.now(),
+      input,
+      result: formatted,
+      date: new Date().toISOString().split("T")[0],
+      direction: isInrToUsd ? "INR → USD" : "USD → INR",
+    };
+
+    const updatedHistory = [newEntry, ...history].slice(0, 15);
+    setHistory(updatedHistory);
+    localStorage.setItem("conversion_history", JSON.stringify(updatedHistory));
   };
 
   const swap = () => {
     setIsInrToUsd(!isInrToUsd);
-    setInput("");
     setResult("");
+  };
+
+  const clearHistory = () => {
+    localStorage.removeItem("conversion_history");
+    setHistory([]);
+  };
+
+  const copyToClipboard = async () => {
+    if (!result) return;
+    await navigator.clipboard.writeText(result);
+    alert("Result copied!");
+  };
+
+  const shareResult = async () => {
+    if (!result || !navigator.share) return alert("Sharing not supported.");
+    await navigator.share({
+      title: "Currency Conversion Result",
+      text: `Converted value: ${result}`,
+    });
   };
 
   if (loading) {
@@ -117,9 +159,9 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen  p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br p-4">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-white text-center">
-        ₹lac → $mil
+        ₹lac ↔ $mil
       </h1>
 
       <div className="w-full max-w-sm sm:max-w-md bg-white/30 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-lg space-y-4 transition-all ease-in-out scale-105">
@@ -127,16 +169,19 @@ export default function App() {
           <span className="font-semibold text-black">
             {isInrToUsd ? "INR → USD" : "USD → INR"}
           </span>
-          <button onClick={swap} className="px-3 py-1">
+          <button onClick={swap} className="px-3 py-1 text-sm font-medium">
             Swap
           </button>
         </div>
 
         <div className="flex justify-between items-center text-sm">
-          <label className="font-bold text-black ">
+          <label className="font-bold text-black">
             Rounding: {rounding ? "On" : "Off"}
           </label>
-          <button onClick={() => setRounding(!rounding)} className="px-3 py-1">
+          <button
+            onClick={() => setRounding(!rounding)}
+            className="px-3 py-1 text-sm font-medium"
+          >
             Toggle
           </button>
         </div>
@@ -150,10 +195,13 @@ export default function App() {
           }
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-full p-3 text-sm sm:text-base rounded-lg border bg-white/50 backdrop-blur-sm text-gray-800 font-semibold focus:outline-none"
+          className="w-full p-3 text-sm sm:text-base rounded-lg border bg-white/50 backdrop-blur-sm text-gray-800 font-semibold focus:outline-none border-none"
         />
 
-        <button onClick={convert} className="w-full  py-2 ">
+        <button
+          onClick={convert}
+          className="w-full bg-black text-white hover:bg-gray-900 py-2 rounded-md font-medium"
+        >
           Convert
         </button>
 
@@ -162,7 +210,55 @@ export default function App() {
             {result}
           </div>
         )}
+
+        {result && (
+          <div className="flex justify-center gap-4 text-sm">
+            <button
+              onClick={copyToClipboard}
+              className="px-3 py-1 text-white"
+            >
+              Copy
+            </button>
+            <button
+              onClick={navigator.share ? shareResult : () => alert("Sharing not supported in this device.")}
+              className="px-3 py-1"
+            >
+              Share
+            </button>
+          </div>
+        )}
+
+        {error && (
+          <div className="text-red-600 text-center text-sm">{error}</div>
+        )}
       </div>
+
+      {history.length > 0 && (
+        <div className="w-full max-w-sm sm:max-w-md mt-6 bg-white/40 backdrop-blur-sm rounded-2xl p-4 shadow-md">
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-lg font-semibold text-gray-800">
+              Conversion History
+            </h2>
+            <button
+              onClick={clearHistory}
+              className="text-sm px-3 py-1 text-red-600 font-medium"
+            >
+              Clear
+            </button>
+          </div>
+          <ul className="max-h-60 overflow-y-auto space-y-2 text-sm text-gray-800">
+            {history.map((item) => (
+              <li key={item.id} className="border-b border-gray-300 pb-1">
+                <span className="font-medium">{item.input}</span> →{" "}
+                <span className="font-bold">{item.result}</span>
+                <div className="text-xs text-gray-600">
+                  {item.direction}, {item.date}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
