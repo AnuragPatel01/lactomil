@@ -213,14 +213,15 @@ export default function App() {
 
         {result && (
           <div className="flex justify-center gap-4 text-sm">
-            <button
-              onClick={copyToClipboard}
-              className="px-3 py-1 text-white"
-            >
+            <button onClick={copyToClipboard} className="px-3 py-1 text-white">
               Copy
             </button>
             <button
-              onClick={navigator.share ? shareResult : () => alert("Sharing not supported in this device.")}
+              onClick={
+                navigator.share
+                  ? shareResult
+                  : () => alert("Sharing not supported in this device.")
+              }
               className="px-3 py-1"
             >
               Share
